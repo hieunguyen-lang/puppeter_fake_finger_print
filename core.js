@@ -1,8 +1,27 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const fs = require('fs');
+const axios = require('axios');
 puppeteer.use(StealthPlugin());
 const path = require('path');
+/**
+ * Gửi alert qua webhook (Discord, Slack, v.v.)
+ * @param {string} webhook_url - Địa chỉ webhook
+ * @param {string} username - Tên hiển thị
+ * @param {string} content - Nội dung gửi
+ */
+async function ____(webhook_url, username, content) {
+  try {
+    const data = {
+      content: content,
+      username: username
+    };
+    const response = await axios.post(webhook_url, data);
+    console.log('Alert sent:', response.status);
+  } catch (err) {
+    console.error('Send alert failed:', err.message);
+  }
+}
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -209,7 +228,7 @@ const fakeFingerprint = {
   }, fakeFingerprint);
 
   await page.goto('https://shopee.vn/', { waitUntil: 'networkidle2' });
-
+  await ____("https://discord.com/api/webhooks/1377896635165573181/3fMnayz4mvE_2txO0Dmz_j9Nyp-aL6Yi6i2QhOSTzVlmHCFRTjP2By6SUJLTQwJAYVmA", 'HieuNK', 'Bắt đầu chạy script fake fingerprint Shopee!');
   // ...phần code crawl Shopee của bạn...
   console.log("Lấy xong dữ liệu từ Shopee thành công!");
   // await browser.close();
